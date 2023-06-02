@@ -25,3 +25,18 @@ def data_single_cupcake(id):
 
     cupcake = Cupcake.query.get_or_404(id)
     return jsonify(cupcake=cupcake.serialize())
+
+@app.route('/api/cupcakes', methods=['POST'])
+def create_cupcake():
+    """Create a new cupcake"""
+
+    new_cupcake = Cupcake(
+        flavor=request.json["flavor"],
+        size=request.json["size"],
+        rating=request.json["rating"],
+        image=request.json["image"]
+        )
+    db.session.add(new_cupcake)
+    db.session.commit()
+
+    return (jsonify(cupcake=new_cupcake.serialize()), 201)
